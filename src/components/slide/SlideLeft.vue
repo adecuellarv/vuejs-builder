@@ -10,5 +10,20 @@
   </v-app>
 </template>
 <script setup>
+import { ref, onMounted } from 'vue';
+import axios from '../../axios';
+
+const data = ref(null);
+const error = ref(null);
+
+console.log('#data', data, '#error', error)
+onMounted(async () => {
+  try {
+    const response = await axios.get('categories');
+    data.value = response.data;
+  } catch (err) {
+    error.value = 'Error al cargar los datos: ' + err.message;
+  }
+});
 
 </script>
