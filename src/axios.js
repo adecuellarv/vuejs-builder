@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { LOCAL_STORAGE } from '@/common/constants';
 import { getUrlBackend } from '@/common/functions';
-let apiBaseUrl = import.meta.env.VITE_JAVA;
-
+let apiBaseUrl = import.meta.env.VITE_NET;
 const backend = localStorage.getItem(LOCAL_STORAGE.backend);
 
 if (backend) apiBaseUrl = getUrlBackend(backend);

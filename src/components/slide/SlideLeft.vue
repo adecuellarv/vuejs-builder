@@ -1,29 +1,54 @@
 <template>
   <v-app>
-    <v-navigation-drawer>
+    <v-navigation-drawer class="div-slide-left">
       <v-list-item title="Componentes" subtitle="Lista"></v-list-item>
       <v-divider></v-divider>
-      <v-list-item link title="List Item 1"></v-list-item>
-      <v-list-item link title="List Item 2"></v-list-item>
-      <v-list-item link title="List Item 3"></v-list-item>
+      <v-list-item
+        v-for="(item, index) in categories"
+        @click="handleComponents(item.categoryId)"
+        :title="item.categoryNameEsp"
+        :key="index"
+      >
+      </v-list-item>
     </v-navigation-drawer>
+    <SubSliderLeft v-show="showSliderComponents" :components="componentsList"  />
   </v-app>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from '../../axios';
+import SubSliderLeft from './SubSliderLeft.vue';
 
-const data = ref(null);
+const categories = ref([]);
+const componentsList = ref([]);
 const error = ref(null);
+const showSliderComponents = ref(false);
 
-console.log('#data', data, '#error', error)
 onMounted(async () => {
   try {
     const response = await axios.get('categories');
-    data.value = response.data;
+    categories.value = response?.data;
   } catch (err) {
-    error.value = 'Error al cargar los datos: ' + err.message;
+    error.value = 'Error al traer categorias: ' + err.message;
   }
 });
 
+const handleComponents = async (categoryId) => {
+  try {
+    const response = await axios.get('components/' + categoryId + '/7');
+    componentsList.value = response?.data;
+    showSliderComponents.value = true;
+  } catch (err) {
+    error.value = 'Error al traer los componentes: ' + err.message;
+    showSliderComponents.value = false;
+  }
+};
+
 </script>
+
+<style scoped>
+.div-slide-left{
+  width: 250px;
+  background: #eee;
+}
+</style>
